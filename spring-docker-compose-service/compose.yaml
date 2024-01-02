@@ -1,0 +1,30 @@
+services:
+  postgres:
+    image: postgres:latest
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+    ports:
+      - '5432:5432'
+    volumes:
+      - postgresql-data:/data/postgresql
+    restart: unless-stopped  
+  pgadmin:
+    image: dpage/pgadmin4
+    container_name: pgadmin4
+    ports:
+      - '4369:80'
+    environment:
+      - PGADMIN_DEFAULT_EMAIL=example@example.com
+      - PGADMIN_DEFAULT_PASSWORD=password
+    volumes:
+      - pgadmin-data:/data/pgadmin
+    restart: unless-stopped  
+    labels:
+      org.springframework.boot.readiness-check.tcp.disable: true
+
+volumes:
+  postgresql-data:
+    driver: local
+  pgadmin-data:
+    driver: local
